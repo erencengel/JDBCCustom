@@ -51,7 +51,39 @@ public class Day1 {
         System.out.println(response.getContentType());
         Assert.assertTrue(response.path("name").equals("Nels"));
         response.prettyPrint();
-
     }
 
+    @Test
+    public void test5(){
+        Response response = RestAssured.given()
+                .pathParam("id", 10).contentType(ContentType.JSON)
+                .when()
+                .get(baseUrl+"/{id}");
+        response.prettyPrint();
+        System.out.println(response.statusCode());
+        System.out.println(response.header("Content-Type"));
+        System.out.println(response.getHeaders().hasHeaderWithName("Transfer-Encoding"));
+        System.out.println(response.header("Date"));
+        response.body().asString();
+        System.out.println(response.asString());
+        //System.out.println(response.path("id"));
+    }
+
+    @Test
+    public void test6(){
+        RestAssured.given()
+                .pathParam("id",10).contentType(ContentType.JSON)
+                .when()
+                .get(baseUrl+"/{id}")
+                .then().assertThat()
+                .contentType("application/json").statusCode(200);
+
+        RestAssured.given()
+                .pathParam("id",10).contentType(ContentType.JSON)
+                .when()
+                .get(baseUrl+"/{id}")
+                .then().assertThat()
+                .contentType(ContentType.JSON).statusCode(200);
+
+    }
 }
